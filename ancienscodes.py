@@ -7,25 +7,25 @@ def graphe_videL() : #créer une liste vide
     return []
 
 def add_sommetL(G, i) :
-    #print(i["id"])
-    if i["id"] >= len(G) : #si le sommet n'existe pas, on l'ajoute à la liste de listes
+    #print(i)
+    if i >= len(G) : #si le sommet n'existe pas, on l'ajoute à la liste de listes
         G.append([])
         
 
 def addL(G, i, j) :
-    if i["id"] >= len(G) : #si le sommet n'existe pas, on l'ajoute à la liste de listes
+    if i >= len(G) : #si le sommet n'existe pas, on l'ajoute à la liste de listes
         add_sommetL(G, i)
-    if j["id"] >= len(G) :
+    if j >= len(G) :
         add_sommetL(G, j)
-    if j["id"] not in G[i["id"]] :
-        G[i["id"]].append(j["id"])
-    if i["id"] not in G[j["id"]] :
-        G[j["id"]].append(i["id"])
+    if j not in G[i] :
+        G[i].append(j)
+    if i not in G[j] :
+        G[j].append(i)
 
 
 def suppL(G, i, j) :
-    a:int = i["id"]
-    b:int = j["id"]
+    a:int = i
+    b:int = j
     #if a in G and b in G :
     if b in G[a] :
         G[a].remove(b)
@@ -75,14 +75,14 @@ def graphe_videM(): #créer une matrice vide
     return np.zeros((0,0))  
 
 def add_sommetM(G, i) :
-    a:int = i["id"]
+    a:int = i
     if a > len(G) :
         G = np.zeros((len(G)+1, len(G)+1))
             
 
 def addM(G, i, j) :
-    a:int = i["id"]
-    b:int = j["id"]
+    a:int = i
+    b:int = j
     if a > len(G) :
         G = np.zeros((len(G)+1, len(G)+1))
     if b > len(G) :
@@ -91,15 +91,15 @@ def addM(G, i, j) :
     G[a][b] = 1
  
 def suppM(G, i, j) :
-    a:int = i["id"]
-    b:int = j["id"]
+    a:int = i
+    b:int = j
     if a < len(G) and b < len(G) :
         G[a][b] = 0
         G[a][b] = 0
 
 def est_voisinM(G, i, j):
-    a:int = i["id"]
-    b:int = j["id"]
+    a:int = i
+    b:int = j
     if i < len(G) and j < len(G) :
         if G[a][b] == 1 and G[a][b] == 1 :
             return True

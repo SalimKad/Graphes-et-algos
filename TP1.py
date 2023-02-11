@@ -60,35 +60,6 @@ def est_voisinL(G, i, j): #vérifie si i et j sont reliés par une arête
             return True
     return False
 
-'''def loadL(nom):
-    G = graphe_videL()
-    f = open(nom, "r")
-    #on lit le nombre de sommets
-    n = int(f.readline())
-    print("n = ", n)
-    m = len(f.readlines())
-    print("m = ", m)
-    for i in range(1, n+1):
-        line = f.readline()
-        line = line.strip().split() #on enlève les espaces
-        add_sommetL(G, {"id": int(line[0]), "nom": line[1]})
-    
-    print("line = ", line)
-    m = len(f.readlines())
-    print("m = ", m)
-    line = f.readline()
-    print("line 2 = ", line)
-    for k in range(0,m):
-        line = f.readline()
-        line = line.strip().split()
-        print("line =", line)
-        #i = int(line[0])
-        #j = int(line[1])
-        addL(G, i, {"id": j})
-    f.close()
-    return G
-'''
-
 def loadL(nom):
     G = graphe_videL()
     f = open(nom, "r")
@@ -102,7 +73,7 @@ def loadL(nom):
         #line = f.readline()
         line = line.strip().split() #on enlève les espaces
         if i<n:
-            add_sommetL(G, {"id": int(line[0]), "nom": line[1], "aretes" : [] }, )
+            add_sommetL(G, {"id": int(line[0]), "nom": line[1], "aretes" : [] })
         else:
             addL(G, {"id": int(line[0])}, {"id": int(line[1])})
         i+=1
@@ -127,92 +98,82 @@ def saveL(G, nom):
         print("Erreur d'ecriture : ", e)
 
 
-'''
 #2 - Représentation d'un graphe par une matrice d'adjacence :
 
-def graphe_videM(): #créer une matrice vide
-    return np.zeros((0,0))  
+import numpy as np
 
-def add_sommetM(G, i) :
-    a:int = i["id"]
-    if a > len(G) :
-        G = np.zeros((len(G)+1, len(G)+1))
-            
+class Graphe:
+    def __init__(self):
+        self.sommets = []
+        self.matrice = np.array([])
 
-def addM(G, i, j) :
-    a:int = i["id"]
-    b:int = j["id"]
-    if a > len(G) :
-        G = np.zeros((len(G)+1, len(G)+1))
-    if b > len(G) :
-        G = np.zeros((len(G)+1, len(G)+1))
-    G[a][b] = 1
-    G[a][b] = 1
- 
-def suppM(G, i, j) :
-    a:int = i["id"]
-    b:int = j["id"]
-    if a < len(G) and b < len(G) :
-        G[a][b] = 0
-        G[a][b] = 0
+def graphe_vide(self):
+    self.sommets = []
+    self.matrice = np.array([])
+    
+def add_sommet(self, i):
+    if i not in self.sommets:
+        self.sommets.append(i)
+        n = len(self.sommets)
+        self.matrice = np.zeros((n, n))
+        
+def add(self, i, j):
+    if i in self.sommets and j in self.sommets:
+        i_index = self.sommets.index(i)
+        j_index = self.sommets.index(j)
+        self.matrice[i_index][j_index] = 1
+        self.matrice[j_index][i_index] = 1
+        
+def supp(self, i, j):
+    if i in self.sommets and j in self.sommets:
+        i_index = self.sommets.index(i)
+        j_index = self.sommets.index(j)
+        self.matrice[i_index][j_index] = 0
+        self.matrice[j_index][i_index] = 0
+        
+def est_voisin(self, i, j):
+    if i in self.sommets and j in self.sommets:
+        i_index = self.sommets.index(i)
+        j_index = self.sommets.index(j)
+        return self.matrice[i_index][j_index] == 1
+    return False
 
-def est_voisinM(G, i, j):
-    a:int = i["id"]
-    b:int = j["id"]
-    if i < len(G) and j < len(G) :
-        if G[a][b] == 1 and G[a][b] == 1 :
-            return True
-        else :
-            return False
-    else :
-        return False
+def load(self, nom):
+    with open(nom, "r") as file:
+        n = int(file.readline().strip())
+        self.sommets = []
+        for i in range(n):
+            line = file.readline().strip()
+            self.sommets.append(line)
+        self.matrice = np.zeros((n, n))
+        for line in file:
+            sommets = line.strip().split(" ")
+            i = self.sommets.index(sommets[0])
+            j = self.sommets.index(sommets[1])
+            self.matrice[i][j] = 1
+            self.matrice[j][i] = 1
 
-def loadM(nom):
-    G = graphe_videM()
-    f = open(nom, "r")
-    for line in f :
-        line = line.split()
-        addM(G, int(line[0]), int(line[1]))
-    f.close()
-    return G
-
-def saveM(G, nom):
-    f = open(nom, "w")
-    for i in range(len(G)) :
-        f.write(i + " " + str(i) +"\n")
-    for i in range(len(G)) :
-        for j in range(len(G)) :
-            if G[i][j] == 1 :
-                f.write(str(i) + " " + str(j)+"\n")
-    f.close()
- 
-   
-def matrice_to_liste(G):
-    L = graphe_videL()
-    for i in range(len(G)) :
-        for j in range(len(G)) :
-            if G[i][j] == 1 :
-                addL(L, i, j)
-    return L
-
-def liste_to_matrice(G):
-    M = graphe_videM()
-    for i in range(len(G)) :
-        for j in G[i] :
-            M[i][j] = 1
-    return M
-'''
+def save(self, nom):
+    with open(nom, "w") as file:
+        n = len(self.sommets)
+        file.write(str(n) + "\n")
+        for sommet in self.sommets:
+            file.write(str(sommet) + "\n")
+        for i in range(n):
+            for j in range(i+1, n):
+                if self.matrice[i][j] == 1:
+                    file.write(str(self.sommets[i]) + " " + str(self.sommets[j]) + "\n")
 
 # TESTS
-grapheL = graphe_videL()
+#TEST LISTES
+
 A ={"id" : 0,"nom" : "A", "aretes" : []}
 B ={"id" : 1,"nom" : "B", "aretes" : []}
 C ={"id" : 2,"nom" : "C", "aretes" : []}
 D ={"id" : 3,"nom" : "D", "aretes" : []}
 
-'''#tableau qui contient les sommets
-sommets = [A, B, C]'''
-
+'''
+grapheL = graphe_videL()
 
 add_sommetL(grapheL, A)
 add_sommetL(grapheL, B)
@@ -237,15 +198,32 @@ print(est_voisinL(grapheL, A, C))
 
 saveL(grapheL, "graphes.txt")
 
-G = loadL("graphes.txt")
-print(G)
-
-'''
 grapheL2 = loadL("grapheL.txt")
 print(grapheL2)
+'''
 
-grapheLM = liste_to_matrice(grapheL)
-print(grapheLM)
+#TESTS MATRICE
+graphe_vide(Graphe)
+print(Graphe.sommets)
+add_sommet(Graphe, 1)
+add_sommet(Graphe, 2)
+add_sommet(Graphe, 3)
+add_sommet(Graphe, 4)
 
 
-grapheM = graphe_videM()'''
+add(Graphe, 1, 2)
+add(Graphe, 2, 3)
+add(Graphe, 3, 4)
+add(Graphe, 4, 1)
+add(Graphe, 1, 3)
+
+print(Graphe.matrice)
+print(est_voisin(Graphe, 1, 2))
+
+supp(Graphe, 1, 2)
+print(Graphe.matrice)
+
+print(est_voisin(Graphe, 1, 2))
+print(est_voisin(Graphe, 2, 3))
+
+save(Graphe, "test.txt")
