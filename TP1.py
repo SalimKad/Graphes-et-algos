@@ -99,10 +99,9 @@ def saveL(G, nom):
 
 
 #2 - Représentation d'un graphe par une matrice d'adjacence :
+GraphenomM = []
 
-import numpy as np
-
-class Graphe:
+class Graphe: 
     def __init__(self):
         self.sommets = []
         self.matrice = np.array([])
@@ -112,29 +111,31 @@ def graphe_vide(self):
     self.matrice = np.array([])
     
 def add_sommet(self, i):
-    if i not in self.sommets:
-        self.sommets.append(i)
+    GraphenomM.append(i["nom"])
+
+    if i["id"] not in self.sommets:
+        self.sommets.append(i["id"])
         n = len(self.sommets)
         self.matrice = np.zeros((n, n))
         
 def add(self, i, j):
-    if i in self.sommets and j in self.sommets:
-        i_index = self.sommets.index(i)
-        j_index = self.sommets.index(j)
+    if i["id"] in self.sommets and j["id"] in self.sommets:
+        i_index = self.sommets.index(i["id"])
+        j_index = self.sommets.index(j["id"])
         self.matrice[i_index][j_index] = 1
         self.matrice[j_index][i_index] = 1
         
 def supp(self, i, j):
-    if i in self.sommets and j in self.sommets:
-        i_index = self.sommets.index(i)
-        j_index = self.sommets.index(j)
+    if i["id"] in self.sommets and j["id"] in self.sommets:
+        i_index = self.sommets.index(i["id"])
+        j_index = self.sommets.index(j["id"])
         self.matrice[i_index][j_index] = 0
         self.matrice[j_index][i_index] = 0
         
 def est_voisin(self, i, j):
-    if i in self.sommets and j in self.sommets:
-        i_index = self.sommets.index(i)
-        j_index = self.sommets.index(j)
+    if i["id"] in self.sommets and j["id"] in self.sommets:
+        i_index = self.sommets.index(i["id"])
+        j_index = self.sommets.index(j["id"])
         return self.matrice[i_index][j_index] == 1
     return False
 
@@ -153,16 +154,43 @@ def load(self, nom):
             self.matrice[i][j] = 1
             self.matrice[j][i] = 1
 
-def save(self, nom):
-    with open(nom, "w") as file:
-        n = len(self.sommets)
-        file.write(str(n) + "\n")
-        for sommet in self.sommets:
-            file.write(str(sommet) + "\n")
-        for i in range(n):
-            for j in range(i+1, n):
-                if self.matrice[i][j] == 1:
-                    file.write(str(self.sommets[i]) + " " + str(self.sommets[j]) + "\n")
+def loadM(nom):
+    G = Graphe()
+    f = open(nom, "r")
+    #on lit le nombre de sommets
+    n = int(f.readline())
+    #print("n = ", n)
+    i:int = 0
+
+    for line in f:
+        #print("line = ", line)
+        #line = f.readline()
+        line = line.strip().split() #on enlève les espaces
+        if i<n:
+            add_sommet(G, {"id": int(line[0]), "nom": line[1]})
+        else:
+            add(G,{"id": int(line[0])}, {"id": int(line[1])})
+        i+=1
+    f.close()
+    return G
+
+def saveM(self, nom):
+
+    f = open(nom, "w")
+    n = len(self.sommets)
+    f.write(str(n) + "\n")
+    cpt:int = 0
+    for sommet in self.sommets:
+        f.write(str(sommet) + " " + GraphenomM[cpt] +"\n")
+        cpt+=1
+    for i in range(n):
+        for j in range(n):
+            if self.matrice[i][j] == 1:
+                f.write(str(self.sommets[i]) + " " + str(self.sommets[j]) + "\n")
+
+       
+    f.close()
+
 
 # TESTS
 #TEST LISTES
@@ -205,25 +233,31 @@ print(grapheL2)
 #TESTS MATRICE
 graphe_vide(Graphe)
 print(Graphe.sommets)
-add_sommet(Graphe, 1)
-add_sommet(Graphe, 2)
-add_sommet(Graphe, 3)
-add_sommet(Graphe, 4)
-
-
-add(Graphe, 1, 2)
-add(Graphe, 2, 3)
-add(Graphe, 3, 4)
-add(Graphe, 4, 1)
-add(Graphe, 1, 3)
+add_sommet(Graphe, A)
+add_sommet(Graphe, B)
+add_sommet(Graphe, C)
+add_sommet(Graphe, D)
 
 print(Graphe.matrice)
-print(est_voisin(Graphe, 1, 2))
 
-supp(Graphe, 1, 2)
+
+add(Graphe, A, B)
+add(Graphe, C, D)
+add(Graphe, B, C)
+add(Graphe, D, A)
+add(Graphe, A, C)
+
+print(Graphe.matrice)
+print("A et B sont voisins ? ", est_voisin(Graphe, A, B))
+print(GraphenomM)
+
+supp(Graphe, A, B)
 print(Graphe.matrice)
 
-print(est_voisin(Graphe, 1, 2))
-print(est_voisin(Graphe, 2, 3))
+print("A et B sont voisins ? ",est_voisin(Graphe, A, B))
+print("B et C sont voisins ? ",est_voisin(Graphe, B, C))
 
-save(Graphe, "test.txt")
+saveM(Graphe, "test.txt")
+
+Graphe2 = loadM("test.txt")
+print(Graphe2.matrice)
