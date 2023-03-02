@@ -114,23 +114,70 @@ def inclus_sommetL(G, G2, strict):
 
     temp = []
 
+    for i in range(len(G2)):
+        temp.append(G2[i]["nom"])
     for i in range(len(G)):
-        temp.append(G[i]["nom"])
         if G[i]["nom"] not in temp :
             return False
     return True
 
-def inclus_aretesL(G, G2):
+def inclus_aretesL(G, G2): #ici l'ordre n'est pas encore géré
 #renvoie 1 si les arêtes du graphe G sont incluses (strictement) dans les arêtes du graphe G’, 0 sinon.
-    for i in range(len(G)):
+    cpt:int=0;
+    cpt2:int=0;
+    for i in range(len(G2)):
+        for j in G2[i]["aretes"]:
+            cpt+=1
+
+    '''for i in range(len(G)):
         for j in G[i]["aretes"]:
+            cpt2+=1
             if not est_voisinL(G2, {"id": i}, {"id": j}):
+                return False'''
+
+    for i in range(len (G)):
+        nom = G[i]["nom"]
+        for j in G[i]["aretes"]:
+            cpt2+=1
+            nom2 = G[j]["nom"]
+            for k in range(len (G2)) :
+                if G2[k]["nom"] == nom :
+                    for l in G2[k]["aretes"]:
+                        print("l=",l)
+                        if G2[l]["nom"] == nom2 :
+                            verif = True
+                            break
+                    break   
+            if not verif :
                 return False
+
+    if cpt == cpt2:
+        return False
     return True
 
 
+def est_partiel(G, G2):
+#renvoie 1 si G est un graphe partiel de G, 0 sinon.
+    if len(G2) != len(G):
+        return False
+    
+    temp = []
+    for i in range(len(G2)):
+        temp.append(G2[i]["nom"])
+    for i in range(len(G)):
+        if G[i]["nom"] not in temp :
+            return False
+
+    if inclus_aretesL(G, G2):
+            return True
+    return False
 
 
+def est_sous_graphe(G, G2):  #à revoir
+#renvoie 1 si G est un sous-graphe de G’, 0 sinon.
+    if inclus_sommetL(G, G2, 1) and inclus_aretesL(G, G2):
+        return True
+    return False
 # TESTS
 #TEST LISTES
 
@@ -146,7 +193,7 @@ grapheL = graphe_videL()
 
 add_sommetL(grapheL, A)
 add_sommetL(grapheL, B)
-#add_sommetL(grapheL, C)
+add_sommetL(grapheL, C)
 #add_sommetL(grapheL, D) 
 
 
@@ -168,7 +215,7 @@ print("graphe L2 :\n", grapheL2)
 print("Sommets de L inclus dans L2 ? ", inclus_sommetL(grapheL, grapheL2, 1))
 
 addL(grapheL, A, B)
-addL(grapheL, C, A)
+#addL(grapheL, C, A)
 #addL(grapheL, C, B)
 #addL(grapheL, B, D)
 
@@ -183,6 +230,11 @@ print("graphe L2 :\n", grapheL2)
 
 print("Aretes de L inclus dans L2 ? ", inclus_aretesL(grapheL, grapheL2))
 
+print("L est un graphe partiel de L2 ? ", est_partiel(grapheL, grapheL2))
+
+print("L est un sous-graphe de L2 ? ", est_sous_graphe(grapheL, grapheL2))
+
+
 '''
 print(est_voisinL(grapheL, A, B))
 print(est_voisinL(grapheL, A, C))
@@ -190,7 +242,7 @@ print(est_voisinL(grapheL, B, C))
 print(est_voisinL(grapheL, A, D))
 
 suppL(grapheL, A, B)
-print(grapheL)
+print(grapheL)²
 
 print(est_voisinL(grapheL, A, C))
 
