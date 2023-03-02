@@ -1,5 +1,7 @@
 #KADIRI HASSANI Salim - GATTO Elisa
 import numpy as np
+import copy
+
 # 1- Représentation d'un graphe par une liste de listes : 
 
 #On crée une structure contenant les informations d'un graphe
@@ -8,55 +10,58 @@ def graphe_videL() : #créer une liste vide
     return []
 
 def add_sommetL(G, i) : #ajoute un sommet à la liste de listes
-    temp = []
+    temp = [] 
+    # temp va contenir les id déjà présentes dans G
     for j in range(len(G)) :
-        temp.append(G[j][0]["id"])
-        #print("Temp = ",temp)
-    #print(i["id"])
+      temp.append(G[j]["id"])
+
     #si G est vide, on ajoute le sommet à la liste de listes
     if len(G) == 0 :
-        G.append([i])
+        j = copy.deepcopy(i)
+        G.append(j)
     #sinon, on vérifie que le sommet n'existe pas déjà
     elif i["id"] not in temp : #si le sommet n'existe pas, on l'ajoute à la liste de listes
-        G.append([i])
+        j = copy.deepcopy(i)
+        G.append(j)
+        
         
 
 def addL(G, i, j) : #ajoute une arête entre i et j
     temp = []
     for k in range(len(G)) :
-        temp.append(G[k][0]["id"])
+        temp.append(G[k]["id"])
 
     if i["id"] not in temp : #si le sommet n'existe pas, on l'ajoute à la liste de listes
         add_sommetL(G, i)
     if j["id"] not in temp :
         add_sommetL(G, j)
-    if j["id"] not in G[i["id"]][0]["aretes"] :
+    if j["id"] not in G[i["id"]]["aretes"] :
         '''print(G[i["id"]])
         print(G[0][0]["aretes"])
         print(i)
-        print(G[i["id"]][0]["aretes"])'''
-        G[i["id"]][0]["aretes"].append(j["id"])
+        print(G[i["id"]]["aretes"])'''
+        G[i["id"]]["aretes"].append(j["id"])
     #print("i id = ", i["id"])
-    #print(G[j["id"]][0])
+    #print(G[j["id"]])
     #problem : j["id"] = 7 et  G[7] n'existe pas
-    if i["id"] not in G[j["id"]][0]["aretes"] :
-        G[j["id"]][0]["aretes"].append(i["id"])
+    if i["id"] not in G[j["id"]]["aretes"] :
+        G[j["id"]]["aretes"].append(i["id"])
 
 
 def suppL(G, i, j) : #supprime l'arête entre i et j
     a:int = i["id"]
     b:int = j["id"]
     #if a in G and b in G :
-    if b in G[a][0]["aretes"] :
-        G[a][0]["aretes"].remove(b)
-    if a in G[b][0]["aretes"] :
-        G[b][0]["aretes"].remove(a)
+    if b in G[a]["aretes"] :
+        G[a]["aretes"].remove(b)
+    if a in G[b]["aretes"] :
+        G[b]["aretes"].remove(a)
 
 def est_voisinL(G, i, j): #vérifie si i et j sont reliés par une arête
     a:int = i["id"]
     b:int = j["id"]
     if a<len(G) and b <len(G) :
-        if b in  G[a][0]["aretes"] and a in G[b][0]["aretes"] :
+        if b in  G[a]["aretes"] and a in G[b]["aretes"] :
             return True
     return False
 
@@ -87,11 +92,11 @@ def saveL(G, nom):
         f.write(str(n) + "\n")
         
         for i in range(n):
-            f.write(str(G[i][0]["id"]) + " " + G[i][0]["nom"] + "\n")
-            #f.write(i[0]["id"] + " " + i[0]["nom"] + "\n")
+            f.write(str(G[i]["id"]) + " " + G[i]["nom"] + "\n")
+            #f.write(i[0]["id"] + " " + i["nom"] + "\n")
 
         for i in range(n):
-            for j in G[i][0]["aretes"]:
+            for j in G[i]["aretes"]:
                 f.write(str(i) + " " + str(j) + "\n")
         f.close()
     except Exception as e:
@@ -99,25 +104,26 @@ def saveL(G, nom):
 
 
 #2 - Représentation d'un graphe par une matrice d'adjacence :
-GraphenomM = []
+
 
 class Graphe: 
     def __init__(self):
         self.sommets = []
         self.matrice = np.array([])
+        self.GraphenomM = []
 
 def graphe_vide(self):
     self.sommets = []
     self.matrice = np.array([])
     
 def add_sommet(self, i):
-    GraphenomM.append(i["nom"])
-
     if i["id"] not in self.sommets:
+        self.GraphenomM.append(i["nom"])
         self.sommets.append(i["id"])
         n = len(self.sommets)
         self.matrice = np.zeros((n, n))
-        
+
+
 def add(self, i, j):
     if i["id"] in self.sommets and j["id"] in self.sommets:
         i_index = self.sommets.index(i["id"])
@@ -139,20 +145,6 @@ def est_voisin(self, i, j):
         return self.matrice[i_index][j_index] == 1
     return False
 
-def load(self, nom):
-    with open(nom, "r") as file:
-        n = int(file.readline().strip())
-        self.sommets = []
-        for i in range(n):
-            line = file.readline().strip()
-            self.sommets.append(line)
-        self.matrice = np.zeros((n, n))
-        for line in file:
-            sommets = line.strip().split(" ")
-            i = self.sommets.index(sommets[0])
-            j = self.sommets.index(sommets[1])
-            self.matrice[i][j] = 1
-            self.matrice[j][i] = 1
 
 def loadM(nom):
     G = Graphe()
@@ -181,7 +173,7 @@ def saveM(self, nom):
     f.write(str(n) + "\n")
     cpt:int = 0
     for sommet in self.sommets:
-        f.write(str(sommet) + " " + GraphenomM[cpt] +"\n")
+        f.write(str(sommet) + " " + self.GraphenomM[cpt] +"\n")
         cpt+=1
     for i in range(n):
         for j in range(n):
@@ -230,34 +222,161 @@ grapheL2 = loadL("grapheL.txt")
 print(grapheL2)
 '''
 
+
 #TESTS MATRICE
-graphe_vide(Graphe)
-print(Graphe.sommets)
-add_sommet(Graphe, A)
-add_sommet(Graphe, B)
-add_sommet(Graphe, C)
-add_sommet(Graphe, D)
+graphe1 = Graphe()
+#print(Graphe.sommets)
+add_sommet(graphe1, A)
+add_sommet(graphe1, B)
+add_sommet(graphe1, C)
+add_sommet(graphe1, D)
 
-print(Graphe.matrice)
+#print(graphe1.sommets)
+#print(graphe1.matrice)
 
+add(graphe1, A, B)
+add(graphe1, C, D)
+add(graphe1, B, C)
+add(graphe1, D, A)
+add(graphe1, A, C)
 
-add(Graphe, A, B)
-add(Graphe, C, D)
-add(Graphe, B, C)
-add(Graphe, D, A)
-add(Graphe, A, C)
+#print(graphe1.matrice)
+#print("A et B sont voisins ? ", est_voisin(graphe1, A, B))
+#print(GraphenomM)
 
-print(Graphe.matrice)
-print("A et B sont voisins ? ", est_voisin(Graphe, A, B))
-print(GraphenomM)
+supp(graphe1, A, B)
+#print(graphe1.matrice)
 
-supp(Graphe, A, B)
-print(Graphe.matrice)
+#print("A et B sont voisins ? ",est_voisin(graphe1, A, B))
+#print("B et C sont voisins ? ",est_voisin(graphe1, B, C))
 
-print("A et B sont voisins ? ",est_voisin(Graphe, A, B))
-print("B et C sont voisins ? ",est_voisin(Graphe, B, C))
-
-saveM(Graphe, "test.txt")
+saveM(graphe1, "test.txt")
 
 Graphe2 = loadM("test.txt")
-print(Graphe2.matrice)
+#print(Graphe2.matrice)
+
+
+def matrice_to_liste(self):
+    liste = graphe_videL()
+    for i in range(len(self.sommets)):
+        #liste.append({"id": self.sommets[i], "nom": GraphenomM[i], "aretes": []})
+        add_sommetL(liste, {"id": self.sommets[i], "nom": GraphenomM[i], "aretes": []})
+    for i in range(len(self.sommets)):
+        for j in range(len(self.sommets)):
+            if self.matrice[i][j] == 1:
+                #liste[i]["aretes"].append(liste[j])
+                addL(liste, {"id": self.sommets[i], "nom": GraphenomM[i], "aretes": []}, {"id": self.sommets[j], "nom": GraphenomM[j], "aretes": []})
+    return liste
+
+def liste_to_matrice(liste):
+    matrice = graphe_vide(Graphe())
+    #transfere de sommets du graphe en liste au graphe en matrice
+    for i in range (len(liste)):
+        #G i "id"
+        a = liste[i]
+        print("a=",a)
+        add_sommet(matrice, a)
+    print("Matrice = ",matrice)
+    #transfere des aretes du graphe en liste au graphe en matrice
+    for i in range (len(liste)):
+        for j in range(len(liste[i]["aretes"])):
+            add(matrice, liste[i]["aretes"][j], liste[j]["id"])
+    return matrice
+
+'''
+graphe_liste = matrice_to_liste(Graphe)
+print(Graphe.matrice)
+print(graphe_liste)
+
+
+graphe_matrice = liste_to_matrice(graphe_liste)
+print(graphe_liste)
+print(graphe_matrice.matrice)
+'''
+
+
+
+# EXERCICE 2 : GRAPHE PARTIEL ET SOUS-GRAPHE
+
+def inclus_sommetM(self, self2, strict):
+    if len(self.sommets) > len(self2.sommets):
+        return False
+    if strict:
+        if len(self.sommets) == len(self2.sommets):
+            return False
+    else:
+        for i in range(len(self.sommets)):
+            if self.sommets[i] not in self2.sommets:
+                return False
+    return True
+
+
+def inclus_areteM(self, self2):
+    for i in range(len(self.sommets)):
+        for j in range(len(self2.sommets)):
+            if self.GrapheNomM[i] == self2.GrapheNomM[j]:
+                continue
+            else: break
+            if self.matrice[i][j] == 1:
+                if self2.matrice[i][j] != 1:
+                    return False
+    return True
+
+graphe = Graphe()
+add_sommet(graphe, A)
+add_sommet(graphe, B)
+add_sommet(graphe, C)
+add_sommet(graphe, D)
+
+add(graphe, A, B)
+add(graphe, C, D)
+add(graphe, B, C)
+add(graphe, D, A)
+add(graphe, A, C)
+#print(graphe.sommets)
+#print(graphe.matrice)
+
+graphe2 = Graphe()
+add_sommet(graphe2, A)
+add_sommet(graphe2, B)
+add_sommet(graphe2, C)
+add_sommet(graphe2, D)
+
+add(graphe2, A, B)
+add(graphe2, C, D)
+add(graphe2, B, C)
+add(graphe2, D, A)
+add(graphe2, A, C)
+
+graphe3 = Graphe()
+add_sommet(graphe3, A)
+add_sommet(graphe3, B)
+add_sommet(graphe3, C)
+add(graphe3, A, B)
+add(graphe3, B, C)
+
+E ={"id" : 4,"nom" : "E", "aretes" : []}
+graphe4 = Graphe()
+add_sommet(graphe4, A)
+add_sommet(graphe4, B)
+add_sommet(graphe4, E)
+add(graphe4, A, B)
+add(graphe4, B, E)
+
+print(graphe.sommets)
+print(graphe2.sommets)
+print(graphe3.sommets)
+print(graphe4.sommets)
+
+print(graphe4.matrice)
+
+'''
+print(inclus_sommetM(graphe2, graphe, 0))
+print(inclus_sommetM(graphe2, graphe, 1))
+print(inclus_sommetM(graphe3, graphe, 0))
+print(inclus_sommetM(graphe4, graphe, 1))
+'''
+
+#print(inclus_areteM(graphe2, graphe))
+#print(inclus_areteM(graphe3, graphe))
+print(inclus_areteM(graphe4, graphe))
