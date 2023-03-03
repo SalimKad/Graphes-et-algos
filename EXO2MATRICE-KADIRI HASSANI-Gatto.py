@@ -2,6 +2,8 @@
 import numpy as np
 import copy
 
+#import EXO1MATRICE-KADIRI HASSANI-Gatto as exo1
+
 # 1- Représentation d'un graphe par une liste de listes : 
 
 #On crée une structure contenant les informations d'un graphe
@@ -314,13 +316,46 @@ def inclus_sommetM(self, self2, strict):
 def inclus_areteM(self, self2):
     for i in range(len(self.sommets)):
         for j in range(len(self2.sommets)):
-            if self.GrapheNomM[i] == self2.GrapheNomM[j]:
+            if self.GrapheNomM[self.sommets[i]] == self2.GrapheNomM[self2.sommets[j]]:
                 continue
             else: break
             if self.matrice[i][j] == 1:
                 if self2.matrice[i][j] != 1:
                     return False
     return True
+
+
+def est_partiel(self, self2):
+    return inclus_sommetM(self, self2, True) and inclus_areteM(self, self2)
+
+def est_sous_graphe(self, self2):
+    if est_partiel(self, self2):
+        for i in range(len(self2.sommets)):
+            if(self2.GrapheNomM[self2.sommets[i]] in self.GrapheNomM):
+                for j in range(len(self.sommets)):
+                    if(self.GrapheNomM[self.sommets[j]] == self2.GrapheNomM[self2.sommets[i]]):
+                        for k in range(len(self.sommets)):
+                            if(self.matrice[j][k] == 1):
+                                if(self2.matrice[i][k] != 1):
+                                    return False
+    return True
+
+
+
+def est_sous_graphe_partiel(self, self2):
+    return est_partiel(self, self2) and est_sous_graphe(self, self2)
+
+def est_clique(self, self2):
+    A
+
+def est_stable(self, self2):
+    if inclus_sommetM(self, self2, False):
+        for i in range(len(self2.sommets)):
+            for j in range(len(self2.sommets)):
+                if self2.matrice[i][j] != 0:
+                    return False
+    return True
+
 
 graphe = Graphe()
 add_sommet(graphe, A)
