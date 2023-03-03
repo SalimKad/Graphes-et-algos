@@ -121,10 +121,10 @@ def inclus_sommetL(G, G2, strict):
             return False
     return True
 
-def inclus_aretesL(G, G2): #ici l'ordre n'est pas encore géré
+def inclus_aretesL(G, G2):
 #renvoie 1 si les arêtes du graphe G sont incluses (strictement) dans les arêtes du graphe G’, 0 sinon.
-    cpt:int=0;
-    cpt2:int=0;
+    cpt:int=0
+    cpt2:int=0
     for i in range(len(G2)):
         for j in G2[i]["aretes"]:
             cpt+=1
@@ -143,7 +143,6 @@ def inclus_aretesL(G, G2): #ici l'ordre n'est pas encore géré
             for k in range(len (G2)) :
                 if G2[k]["nom"] == nom :
                     for l in G2[k]["aretes"]:
-                        print("l=",l)
                         if G2[l]["nom"] == nom2 :
                             verif = True
                             break
@@ -174,9 +173,25 @@ def est_partiel(G, G2):
 
 
 def est_sous_graphe(G, G2):  #à revoir
-#renvoie 1 si G est un sous-graphe de G’, 0 sinon.
-    if inclus_sommetL(G, G2, 1) and inclus_aretesL(G, G2):
+#renvoie 1 si G est un sous-graphe de G2, 0 sinon.
+    if not inclus_sommetL(G, G2, 1):
+        return False
+    if len(G) >= len(G2):
+        return False
+    temp = []
+    for i in range(len(G)):
+        if G2[i]["nom"] in G[i]["nom"]:
+            temp.append(G2[i]) #temp contient les noms des éléments en commun
+            print("temp = ",temp)
+    #là mon temp contient tous les sommets, mais contient trop d'arêtes, je dois retirer celles des sommets qui n'existent plus
+    for i in range(len(temp)):
+        for j in temp[i]["aretes"]:
+            if j not in temp:
+                temp[i]["aretes"].remove(j)
+    print("temp = ",temp)
+    if temp == G :
         return True
+    
     return False
 # TESTS
 #TEST LISTES
@@ -189,22 +204,17 @@ D ={"id" : 3,"nom" : "D", "aretes" : []}
 
 grapheL = graphe_videL()
 
-
-
 add_sommetL(grapheL, A)
 add_sommetL(grapheL, B)
 add_sommetL(grapheL, C)
-#add_sommetL(grapheL, D) 
+add_sommetL(grapheL, D) 
 
-
-#print(A)
 
 grapheL2 = graphe_videL()
 add_sommetL(grapheL2, A)
 add_sommetL(grapheL2, B)
 add_sommetL(grapheL2, C)
-#add_sommetL(grapheL2, D) 
-
+add_sommetL(grapheL2, D) 
 
 
 print("graphe L :\n", grapheL)
@@ -215,7 +225,7 @@ print("graphe L2 :\n", grapheL2)
 print("Sommets de L inclus dans L2 ? ", inclus_sommetL(grapheL, grapheL2, 1))
 
 addL(grapheL, A, B)
-#addL(grapheL, C, A)
+addL(grapheL, C, A)
 #addL(grapheL, C, B)
 #addL(grapheL, B, D)
 
@@ -223,6 +233,8 @@ addL(grapheL, A, B)
 addL(grapheL2, A, B)
 addL(grapheL2, C, A)
 addL(grapheL2, C, B)
+addL(grapheL2, B, D)
+addL(grapheL2, C, D)
 
 
 print("graphe L :\n", grapheL)
@@ -232,23 +244,17 @@ print("Aretes de L inclus dans L2 ? ", inclus_aretesL(grapheL, grapheL2))
 
 print("L est un graphe partiel de L2 ? ", est_partiel(grapheL, grapheL2))
 
-print("L est un sous-graphe de L2 ? ", est_sous_graphe(grapheL, grapheL2))
+
+grapheL3 = graphe_videL()
+add_sommetL(grapheL3, A)
+add_sommetL(grapheL3, B)
+add_sommetL(grapheL3, C)
+addL(grapheL3,A,B)
+addL(grapheL3,C,A)
+addL(grapheL3,C,B)
+
+print("graphe L3 :\n", grapheL3)
+
+print("L3 est un sous-graphe de L2 ? ", est_sous_graphe(grapheL3, grapheL2))
 
 
-'''
-print(est_voisinL(grapheL, A, B))
-print(est_voisinL(grapheL, A, C))
-print(est_voisinL(grapheL, B, C))
-print(est_voisinL(grapheL, A, D))
-
-suppL(grapheL, A, B)
-print(grapheL)²
-
-print(est_voisinL(grapheL, A, C))
-
-saveL(grapheL, "graphes.txt")
-
-grapheL2 = loadL("graphes.txt")
-print(grapheL2)
-
-'''
