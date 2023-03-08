@@ -449,6 +449,7 @@ print(est_sous_graphe_partiel(graphe5, graphe))
 '''
 
 #3 - Rayon, diamètre et centre :
+
 def calcul_distances(G):
     #calcule les plus courtes distances (en nombre d’arêtes) entre tout couple de sommets du graphe G.
     n = len(G.sommets)
@@ -468,10 +469,12 @@ def calcul_distances(G):
                     dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
     return dist
 
+'''
 print("distances graphe : ")
 print(calcul_distances(graphe))
 print("distances graphe5 : ")
 print(calcul_distances(graphe5))
+'''
 
 def donne_diametre(G):
     #distance maximale entre deux sommets
@@ -483,8 +486,8 @@ def donne_diametre(G):
             diametre = max(diametre, dist[i][j])
     return diametre
 
-print("\ndiametre graphe :")
-print(donne_diametre(graphe))
+#print("\ndiametre graphe :")
+#print(donne_diametre(graphe))
 
 def excentricite(G, s):
     #distance maximale entre un sommet s et les autres sommets du graphe
@@ -495,24 +498,95 @@ def excentricite(G, s):
         excent = max(excent, dist[s][i])
     return excent
 
-excentricites = []
+#print("\nexcentricites graphe :")
+excentricites = np.zeros(len(graphe.sommets))
 for i in range(len(graphe.sommets)):
-    excentricites.append(excentricite(graphe,i))
+    excentricites[i] = excentricite(graphe,i)
+#print(excentricites)
 
 def donne_centres(G):
     dist = calcul_distances(G)
     n = len(G.sommets)
     centre = []
-    excentricites = []
+    excentricites = np.zeros(n)
     dmin = 1000000
+    
     for i in range(n):
-        excentricites.append(excentricite(G, i))
+        excentricites[i] = excentricite(G, i)
+        
     for i in range(n):
         if excentricites[i] < dmin:
             dmin = excentricites[i]
+            
     for i in range(n):
         if excentricites[i] == dmin:
             centre.append(G.sommets[i])
-    return len(centre),centre,excentricites[centre[0]]
+    rayon = excentricite(G,centre[0])
+    
+    return (len(centre),centre,rayon)
 
-print(donne_centres(graphe))
+#print("\ndonne_centre graphe :")
+#print(donne_centres(graphe))
+
+def calcul_degres(G):
+    n = len(G.sommets)
+    degres = np.zeros(n, dtype=int)
+    
+    for i in range(n):
+        for j in range(n):
+            if G.matrice[i][j] == 1:
+                degres[i] += 1
+    
+    return degres
+
+#print("\ndegrés de graphe :")
+#print(calcul_degres(graphe))
+
+def donne_centres_degre(G):
+    n = len(G.sommets)
+    degres = calcul_degres(G)
+    degre_max = 0
+    centre = []
+            
+    for i in range(len(degres)):
+        if degres[i] > degre_max : 
+            degre_max = degres[i]
+    
+    for i in range(n):
+        if degres[i] == degre_max:
+            centre.append(G.sommets[i])
+    print(centre)
+                
+    return (len(centre),centre,degre_max)
+
+#print("\ncentres en fonction du degré max : ")
+#print(donne_centres_degre(graphe))
+
+
+#4 - Graphes aléatoires
+
+import random
+
+def G(n,p):
+    #probabilité p
+    #n sommets
+    #chaque paire (x, y) de sommets est connectée de façon indépendante selon la probabilité p
+    graphe = Graphe()
+    
+    for i in range(n):
+        #add_sommetM
+        #problème avec les dictionnaires ?
+        
+    nb_aretes = random.randint(0,n) #borne max pour le nombre d'arêtes
+    #print(nb_aretes)
+    
+    for i in range(nb_aretes):
+        j = random.randint(0,n)
+        k = random.randint(0,n)
+        graphe.matrice[j][k] = 1
+        
+    #implémenter la notion de probabilité ?
+        
+    return graphe
+
+#G(1,1)
