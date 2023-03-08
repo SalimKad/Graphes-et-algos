@@ -67,3 +67,103 @@ def est_voisinL(G, i, j): #vérifie si i et j sont reliés par une arête
     return False
 
 
+#Graphe connexe : tout sommet peut être relié à tout autre sommet par une arête ou une suite d'arêtes
+
+def calcul_distances(G) :
+    #calcule les plus courtes distances (en nombre d’arêtes) entre tout couple de sommets du graphe G
+    #on utilise l'algorithme de Floyd-Warshall
+    #on crée une matrice de distances
+
+    #on crée une matrice de distances
+    n = len(G)
+    D = np.zeros((n,n), dtype=int)
+    for i in range(n) :
+
+        for j in range(n) :
+            if i != j :
+                if est_voisinL(G, G[i], G[j]) :
+                    D[i][j] = 1
+                else :
+                    D[i][j] = 999999
+            else :
+                D[i][j] = 0
+                
+    #on calcule les plus courtes distances
+    for k in range(n) :
+        for i in range(n) :
+            for j in range(n) :
+                if D[i][k] + D[k][j] < D[i][j] :
+                    D[i][j] = D[i][k] + D[k][j]
+    return D
+
+
+def donne_diametre(G, D):
+    #qui renvoie le diamètre du graphe G à partir de la structure de données 
+    #D (au choix) contenant les plus courtes distances entre tout couple de sommets de G
+    n = len(G)
+    diametre = 0
+    for i in range(n) :
+        for j in range(n) :
+            if D[i][j] > diametre :
+                diametre = D[i][j]
+    return diametre
+
+
+def donne_centres(G, D):
+    #retourne le nombre de centres du graphe G, la liste des centres (structure de données au choix), et le rayon de G.
+    n = len(G)
+    centres = []
+    temp = D[0][0]
+    for i in range(n)  :
+        if D[0][i] > temp :
+            temp = D[0][i]
+    rayon = temp
+    #print(rayon)
+    for i in range(n) :
+        for j in range(n) :
+            #print("max = ",max(D[i]))
+            if max(D[i]) < rayon :
+                rayon = max(D[i])           
+    for i in range(n) :
+        if max(D[i]) == rayon :
+            centres.append(G[i])
+    return len(centres), centres, rayon
+
+
+# TESTS
+#TEST LISTES
+
+S1 ={"id" : 0,"nom" : "A", "aretes" : []}
+S2 ={"id" : 1,"nom" : "B", "aretes" : []}
+S3 ={"id" : 2,"nom" : "C", "aretes" : []}
+S4 ={"id" : 3,"nom" : "D", "aretes" : []}
+
+S5 = {"id" : 2,"nom" : "D", "aretes" : []}
+
+
+grapheL = graphe_videL()
+
+add_sommetL(grapheL, S1)
+add_sommetL(grapheL, S2)
+add_sommetL(grapheL, S3)
+add_sommetL(grapheL, S4) 
+
+addL(grapheL, S1, S2) # A B
+addL(grapheL, S1, S3) # A C
+addL(grapheL, S1, S4) #A D 
+addL(grapheL, S2, S3) # B C
+addL(grapheL, S3, S4) # D C
+#addL(grapheL, S2, S4) # D B
+
+
+print("graphe L :\n", grapheL)
+
+D = calcul_distances(grapheL)
+print("matrice de distances :\n", D)
+
+print("diametre : ", donne_diametre(grapheL, D))
+
+print("\nnombre de centres : ", donne_centres(grapheL, D)[0])
+print("centres : ", donne_centres(grapheL, D)[1])
+print("rayon : ", donne_centres(grapheL, D)[2])
+
