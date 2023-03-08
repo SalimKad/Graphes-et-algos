@@ -314,13 +314,22 @@ def inclus_sommetM(self, self2, strict):
 
 
 def inclus_areteM(self, self2):
+    #if inclus_sommetM(self,self2,False):
     for i in range(len(self.sommets)):
-        for j in range(len(self2.sommets)):
-            if self.GrapheNomM[self.sommets[i]] == self2.GrapheNomM[self2.sommets[j]]:
-                continue
-            else: break
-            if self.matrice[i][j] == 1:
-                if self2.matrice[i][j] != 1:
+        #print(self.GraphenomM[i])
+        if self.GraphenomM[i] in self2.GraphenomM:
+            for j in range(len(self.sommets)):
+                #print(self.GraphenomM[self.sommets[i]])
+                #print(self.GraphenomM[i])
+                #print(self2.GraphenomM[j])
+                #print("\n")
+                if self.matrice[i][j] == 1:
+                    if self2.matrice[i][j] != 1:
+                        return False
+        else:
+            for j in range(len(self.sommets)):
+                #print(self.matrice[i][j])
+                if self.matrice[i][j] == 1:
                     return False
     return True
 
@@ -330,23 +339,24 @@ def est_partiel(self, self2):
 
 def est_sous_graphe(self, self2):
     if est_partiel(self, self2):
-        for i in range(len(self2.sommets)):
-            if(self2.GrapheNomM[self2.sommets[i]] in self.GrapheNomM):
-                for j in range(len(self.sommets)):
-                    if(self.GrapheNomM[self.sommets[j]] == self2.GrapheNomM[self2.sommets[i]]):
-                        for k in range(len(self.sommets)):
-                            if(self.matrice[j][k] == 1):
-                                if(self2.matrice[i][k] != 1):
-                                    return False
+        for i in range(len(self.sommets)):
+            for j in range(len(self.sommets)):
+                #if(self.GraphenomM[i] is self2.GraphenomM[j]):
+                    #for k in range(len(self.sommets)):
+                if(self2.matrice[i][j] == 1):
+                    if(self.matrice[i][j] != 1):
+                        return False
+    else: return False
     return True
-
 
 
 def est_sous_graphe_partiel(self, self2):
     return est_partiel(self, self2) and est_sous_graphe(self, self2)
 
+'''
 def est_clique(self, self2):
     A
+'''
 
 def est_stable(self, self2):
     if inclus_sommetM(self, self2, False):
@@ -389,6 +399,7 @@ add_sommet(graphe3, B)
 add_sommet(graphe3, C)
 add(graphe3, A, B)
 add(graphe3, B, C)
+add(graphe3, A, C)
 
 E ={"id" : 4,"nom" : "E", "aretes" : []}
 graphe4 = Graphe()
@@ -398,6 +409,14 @@ add_sommet(graphe4, E)
 add(graphe4, A, B)
 add(graphe4, B, E)
 
+graphe5 = Graphe()
+add_sommet(graphe5, A)
+add_sommet(graphe5, B)
+add_sommet(graphe5, C)
+add(graphe5, A, B)
+add(graphe5, B, C)
+
+'''
 print(graphe.sommets)
 print(graphe2.sommets)
 print(graphe3.sommets)
@@ -405,13 +424,95 @@ print(graphe4.sommets)
 
 print(graphe4.matrice)
 
-'''
+
 print(inclus_sommetM(graphe2, graphe, 0))
 print(inclus_sommetM(graphe2, graphe, 1))
 print(inclus_sommetM(graphe3, graphe, 0))
 print(inclus_sommetM(graphe4, graphe, 1))
+
+print(graphe4.GraphenomM)
+print(graphe4.sommets)
+print(inclus_areteM(graphe3,graphe))
+print(inclus_areteM(graphe4,graphe))
+print(inclus_areteM(graphe4,graphe2))
+
+print(est_partiel(graphe3, graphe))
+print(est_partiel(graphe4, graphe))
+
+print(est_sous_graphe(graphe3, graphe))
+print(est_sous_graphe(graphe4, graphe))
+print(est_sous_graphe(graphe5, graphe))
+
+print(est_sous_graphe_partiel(graphe3, graphe))
+print(est_sous_graphe_partiel(graphe4, graphe))
+print(est_sous_graphe_partiel(graphe5, graphe))
 '''
 
-#print(inclus_areteM(graphe2, graphe))
-#print(inclus_areteM(graphe3, graphe))
-print(inclus_areteM(graphe4, graphe))
+#3 - Rayon, diamètre et centre :
+def calcul_distances(G):
+    #calcule les plus courtes distances (en nombre d’arêtes) entre tout couple de sommets du graphe G.
+    n = len(G.sommets)
+    dist = [[0 for i in range(n)] for j in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if G.matrice[i][j] != 0:
+                dist[i][j] = 1
+            else:
+                dist[i][j] = 1000000
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if i==j:
+                    dist[i][j] = 0
+                else:
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    return dist
+
+print("distances graphe : ")
+print(calcul_distances(graphe))
+print("distances graphe5 : ")
+print(calcul_distances(graphe5))
+
+def donne_diametre(G):
+    #distance maximale entre deux sommets
+    dist = calcul_distances(G)
+    n = len(G.sommets)
+    diametre = 0
+    for i in range(n):
+        for j in range(n):
+            diametre = max(diametre, dist[i][j])
+    return diametre
+
+print("\ndiametre graphe :")
+print(donne_diametre(graphe))
+
+def excentricite(G, s):
+    #distance maximale entre un sommet s et les autres sommets du graphe
+    dist = calcul_distances(G)
+    n = len(G.sommets)
+    excent = 0
+    for i in range(n):
+        excent = max(excent, dist[s][i])
+    return excent
+
+excentricites = []
+for i in range(len(graphe.sommets)):
+    excentricites.append(excentricite(graphe,i))
+
+def donne_centres(G):
+    dist = calcul_distances(G)
+    n = len(G.sommets)
+    centre = []
+    excentricites = []
+    dmin = 1000000
+    for i in range(n):
+        excentricites.append(excentricite(G, i))
+    for i in range(n):
+        if excentricites[i] < dmin:
+            dmin = excentricites[i]
+    for i in range(n):
+        if excentricites[i] == dmin:
+            centre.append(G.sommets[i])
+    return len(centre),centre,excentricites[centre[0]]
+
+print(donne_centres(graphe))
