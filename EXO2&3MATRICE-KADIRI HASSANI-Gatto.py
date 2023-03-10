@@ -568,25 +568,27 @@ def donne_centres_degre(G):
 import random
 
 def G(n,p):
-    #probabilité p
-    #n sommets
-    #chaque paire (x, y) de sommets est connectée de façon indépendante selon la probabilité p
+    '''probabilité p
+    n sommets
+    chaque paire (x, y) de sommets est connectée de façon indépendante selon la probabilité p'''
     graphe = Graphe()
     
     for i in range(n):
-        #add_sommetM
-        #problème avec les dictionnaires ?
         
-    nb_aretes = random.randint(0,n) #borne max pour le nombre d'arêtes
-    #print(nb_aretes)
+        add_sommet(graphe,{"id" : i,"nom" : "sommet "+str(i), "aretes" : []})
     
-    for i in range(nb_aretes):
-        j = random.randint(0,n)
-        k = random.randint(0,n)
-        graphe.matrice[j][k] = 1
-        
-    #implémenter la notion de probabilité ?
+    n = len(graphe.sommets)
+    
+    for i in range(n):
+        for j in range(n):
+            x = random.random()
+            #print(x)
+            if(x > p):
+                graphe.matrice[i][j] = 1
+                graphe.matrice[j][i] = 1
         
     return graphe
 
-#G(1,1)
+graphe6 = G(5,0.7)
+print(graphe6.sommets)
+print(graphe6.matrice)
