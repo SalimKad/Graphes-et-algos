@@ -129,6 +129,45 @@ def donne_centres(G, D):
             centres.append(G[i])
     return len(centres), centres, rayon
 
+def calcul_degres(G) : 
+    #calcul le degré de chaque sommet du graphe G
+    n = len(G)
+    degres = np.zeros(n, dtype=int)
+    for i in range(n) :
+        degres[i] = len(G[i]["aretes"])
+    return degres
+
+def donne_centres_degre(G, D) :
+    #retourne le nombre de centres du graphe G, la liste des centres, et le rayon de G.
+    n = len(G)
+    centres = []
+    degmax = D[0]
+
+    for i in range(n)  :
+        if D[i] > degmax :
+            degmax = D[i]
+    
+    #print(degmax)
+
+    for i in range(n) :
+        if D[i] == degmax :
+            centres.append(G[i])
+    return len(centres), centres, degmax
+
+
+    '''for i in range(n)  : #on calcule le rayon
+        if D[i] > temp : #on prend la plus grande distance entre le sommet 0 et les autres sommets
+            temp = D[i] #on prend la plus grande distance entre le sommet 0 et les autres sommets
+    rayon = temp
+
+    for i in range(n) :
+        for j in range(n) :
+            if max(D[i]) < rayon :
+                rayon = max(D[i])           
+    for i in range(n) :
+        if max(D[i]) == rayon :
+            centres.append(G[i])
+    return len(centres), centres, rayon'''
 
 # TESTS
 #TEST LISTES
@@ -163,7 +202,70 @@ print("matrice de distances :\n", D)
 
 print("diametre : ", donne_diametre(grapheL, D))
 
-print("\nnombre de centres : ", donne_centres(grapheL, D)[0])
-print("centres : ", donne_centres(grapheL, D)[1])
-print("rayon : ", donne_centres(grapheL, D)[2])
+nbcentres, centres, rayon = donne_centres(grapheL, D)
+print("\nnombre de centres : ", nbcentres)
+print("centres : ", centres)
+print("rayon : ", rayon)
+
+## DEGRES :
+
+D2 = calcul_degres(grapheL)
+
+print("\nDEGRES : ", D2)
+
+nbcentres2, centres2, degmax2 = donne_centres_degre(grapheL, D2)
+print("\nnombre de centres : ", nbcentres2)
+print("centres : ", centres2)
+print("Degre maximal d'un sommet de G : ", degmax2)
+
+### 2ème TEST
+
+S1 ={"id" : 0,"nom" : "A", "aretes" : []}
+S2 ={"id" : 1,"nom" : "B", "aretes" : []}
+S3 ={"id" : 2,"nom" : "C", "aretes" : []}
+S4 ={"id" : 3,"nom" : "D", "aretes" : []}
+S5 ={"id" : 4,"nom" : "E", "aretes" : []}
+
+print("\n2ème TEST : ")
+
+grapheL2 = graphe_videL()
+
+add_sommetL(grapheL2, S1)
+add_sommetL(grapheL2, S2)
+add_sommetL(grapheL2, S3)
+add_sommetL(grapheL2, S4)
+add_sommetL(grapheL2, S5)
+
+addL(grapheL2, S1, S2) # A B
+addL(grapheL2, S1, S3) # A C
+addL(grapheL2, S1, S4) #A D
+addL(grapheL2, S1, S5) # A E
+addL(grapheL2, S2, S3) # B C
+addL(grapheL2, S3, S4) # D C
+addL(grapheL2, S4, S5) # E D
+
+print("graphe L :\n", grapheL2)
+
+D = calcul_distances(grapheL2)
+print("matrice de distances :\n", D)
+
+print("diametre : ", donne_diametre(grapheL2, D))
+
+nbcentres, centres, rayon = donne_centres(grapheL2, D)
+print("\nnombre de centres : ", nbcentres)
+print("centres : ", centres)
+print("rayon : ", rayon)
+
+## DEGRES :
+
+D2 = calcul_degres(grapheL2)
+
+print("\nDEGRES : ", D2)
+
+nbcentres2, centres2, degmax2 = donne_centres_degre(grapheL2, D2)
+print("\nnombre de centres : ", nbcentres2)
+print("centres : ", centres2)
+print("Degre maximal d'un sommet de G : ", degmax2)
+
+
 
