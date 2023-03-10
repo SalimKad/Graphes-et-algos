@@ -6,10 +6,12 @@ import copy
 
 #On crée une structure contenant les informations d'un graphe
 
-def graphe_videL() : #créer une liste vide
+def graphe_videL() : 
+    '''créer une liste vide'''
     return []
 
-def add_sommetL(G, i) : #ajoute un sommet à la liste de listes
+def add_sommetL(G, i) :
+    '''ajoute un sommet à la liste de listes'''
     temp = [] 
     # temp va contenir les id déjà présentes dans G
     for j in range(len(G)) :
@@ -26,7 +28,8 @@ def add_sommetL(G, i) : #ajoute un sommet à la liste de listes
         
         
 
-def addL(G, i, j) : #ajoute une arête entre i et j
+def addL(G, i, j) :
+    '''ajoute une arête entre i et j'''
     temp = []
     for k in range(len(G)) :
         temp.append(G[k]["id"])
@@ -43,29 +46,32 @@ def addL(G, i, j) : #ajoute une arête entre i et j
         G[i["id"]]["aretes"].append(j["id"])
     #print("i id = ", i["id"])
     #print(G[j["id"]])
-    #problem : j["id"] = 7 et  G[7] n'existe pas
     if i["id"] not in G[j["id"]]["aretes"] :
         G[j["id"]]["aretes"].append(i["id"])
 
 
-def suppL(G, i, j) : #supprime l'arête entre i et j
+def suppL(G, i, j) : 
+    '''supprime l'arête entre i et j'''
     a:int = i["id"]
     b:int = j["id"]
-    #if a in G and b in G :
+
     if b in G[a]["aretes"] :
         G[a]["aretes"].remove(b)
     if a in G[b]["aretes"] :
         G[b]["aretes"].remove(a)
 
-def est_voisinL(G, i, j): #vérifie si i et j sont reliés par une arête
+def est_voisinL(G, i, j): 
+    '''vérifie si i et j sont reliés par une arête'''
     a:int = i["id"]
     b:int = j["id"]
+
     if a<len(G) and b <len(G) :
         if b in  G[a]["aretes"] and a in G[b]["aretes"] :
             return True
     return False
 
 def loadL(nom):
+    '''charge un graphe depuis un fichier'''
     G = graphe_videL()
     f = open(nom, "r")
     #on lit le nombre de sommets
@@ -74,8 +80,6 @@ def loadL(nom):
     i:int = 0
 
     for line in f:
-        #print("line = ", line)
-        #line = f.readline()
         line = line.strip().split() #on enlève les espaces
         if i<n:
             add_sommetL(G, {"id": int(line[0]), "nom": line[1], "aretes" : [] })
@@ -86,6 +90,7 @@ def loadL(nom):
     return G    
 
 def saveL(G, nom):
+    '''sauvegarde un graphe dans un fichier'''
     try:
         f = open(nom, "w")
         n = len(G)
@@ -191,7 +196,7 @@ B ={"id" : 1,"nom" : "B", "aretes" : []}
 C ={"id" : 2,"nom" : "C", "aretes" : []}
 D ={"id" : 3,"nom" : "D", "aretes" : []}
 
-'''
+
 grapheL = graphe_videL()
 
 add_sommetL(grapheL, A)
@@ -219,7 +224,7 @@ saveL(grapheL, "graphes.txt")
 
 grapheL2 = loadL("grapheL.txt")
 print(grapheL2)
-'''
+
 
 
 #TESTS MATRICE

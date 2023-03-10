@@ -2,14 +2,14 @@
 import numpy as np
 import copy
 
-# 1- Représentation d'un graphe par une liste de listes : 
+################ FONCTIONS DE L'EXERCICE 1 DONT ON A BESOIN ################
 
-#On crée une structure contenant les informations d'un graphe
-
-def graphe_videL() : #créer une liste vide
+def graphe_videL() : 
+    '''créer une liste vide'''
     return []
 
-def add_sommetL(G, i) : #ajoute un sommet à la liste de listes
+def add_sommetL(G, i) :
+    '''ajoute un sommet à la liste de listes'''
     temp = [] 
     # temp va contenir les id déjà présentes dans G
     for j in range(len(G)) :
@@ -22,12 +22,12 @@ def add_sommetL(G, i) : #ajoute un sommet à la liste de listes
     #sinon, on vérifie que le sommet n'existe pas déjà
     elif i["id"] not in temp : #si le sommet n'existe pas, on l'ajoute à la liste de listes
         j = copy.deepcopy(i)
-        #j["id"] = len(G) 
         G.append(j)
         
         
 
-def addL(G, i, j) : #ajoute une arête entre i et j
+def addL(G, i, j) :
+    '''ajoute une arête entre i et j'''
     temp = []
     for k in range(len(G)) :
         temp.append(G[k]["id"])
@@ -44,35 +44,38 @@ def addL(G, i, j) : #ajoute une arête entre i et j
         G[i["id"]]["aretes"].append(j["id"])
     #print("i id = ", i["id"])
     #print(G[j["id"]])
-    #problem : j["id"] = 7 et  G[7] n'existe pas
     if i["id"] not in G[j["id"]]["aretes"] :
         G[j["id"]]["aretes"].append(i["id"])
 
 
-def suppL(G, i, j) : #supprime l'arête entre i et j
+def suppL(G, i, j) : 
+    '''supprime l'arête entre i et j'''
     a:int = i["id"]
     b:int = j["id"]
-    #if a in G and b in G :
+
     if b in G[a]["aretes"] :
         G[a]["aretes"].remove(b)
     if a in G[b]["aretes"] :
         G[b]["aretes"].remove(a)
 
-def est_voisinL(G, i, j): #vérifie si i et j sont reliés par une arête
+def est_voisinL(G, i, j): 
+    '''vérifie si i et j sont reliés par une arête'''
     a:int = i["id"]
     b:int = j["id"]
+
     if a<len(G) and b <len(G) :
         if b in  G[a]["aretes"] and a in G[b]["aretes"] :
             return True
     return False
 
+################ FONCTIONS DE L'EXERCICE 3 ################
 
 #Graphe connexe : tout sommet peut être relié à tout autre sommet par une arête ou une suite d'arêtes
 
 def calcul_distances(G) :
-    #calcule les plus courtes distances (en nombre d’arêtes) entre tout couple de sommets du graphe G
-    #on utilise l'algorithme de Floyd-Warshall
-    #on crée une matrice de distances
+    '''calcule les plus courtes distances (en nombre d’arêtes) entre tout couple de sommets du graphe G
+    On utilise l'algorithme de Floyd-Warshall
+    On crée une matrice de distances'''
 
     #on crée une matrice de distances
     n = len(G)
@@ -84,7 +87,7 @@ def calcul_distances(G) :
                 if est_voisinL(G, G[i], G[j]) :
                     D[i][j] = 1
                 else :
-                    D[i][j] = 999999
+                    D[i][j] = n #on met n pour représenter l'infini car on ne peut pas avoir de distance supérieure à n-1 dans un graphe connexe
             else :
                 D[i][j] = 0
                 
@@ -92,14 +95,14 @@ def calcul_distances(G) :
     for k in range(n) :
         for i in range(n) :
             for j in range(n) :
-                if D[i][k] + D[k][j] < D[i][j] :
+                if D[i][k] + D[k][j] < D[i][j] : #si la distance entre i et j par k est plus courte que la distance directe entre i et j
                     D[i][j] = D[i][k] + D[k][j]
     return D
 
 
 def donne_diametre(G, D):
-    #qui renvoie le diamètre du graphe G à partir de la structure de données 
-    #D (au choix) contenant les plus courtes distances entre tout couple de sommets de G
+    '''Renvoie le diamètre du graphe G à partir de la structure de données 
+    D (au choix) contenant les plus courtes distances entre tout couple de sommets de G'''
     n = len(G)
     diametre = 0
     for i in range(n) :
@@ -110,7 +113,7 @@ def donne_diametre(G, D):
 
 
 def donne_centres(G, D):
-    #retourne le nombre de centres du graphe G, la liste des centres (structure de données au choix), et le rayon de G.
+    '''retourne le nombre de centres du graphe G, la liste des centres, et le rayon de G'''
     n = len(G)
     centres = []
     temp = D[0][0]
@@ -130,7 +133,7 @@ def donne_centres(G, D):
     return len(centres), centres, rayon
 
 def calcul_degres(G) : 
-    #calcul le degré de chaque sommet du graphe G
+    '''calcul le degré de chaque sommet du graphe G'''
     n = len(G)
     degres = np.zeros(n, dtype=int)
     for i in range(n) :
@@ -138,46 +141,29 @@ def calcul_degres(G) :
     return degres
 
 def donne_centres_degre(G, D) :
-    #retourne le nombre de centres du graphe G, la liste des centres, et le rayon de G.
+    '''retourne le nombre de centres du graphe G, la liste des centres, et le rayon de G'''
     n = len(G)
     centres = []
     degmax = D[0]
 
-    for i in range(n)  :
+    for i in range(n)  : #on cherche le degré maximum
         if D[i] > degmax :
-            degmax = D[i]
-    
+            degmax = D[i]    
     #print(degmax)
 
-    for i in range(n) :
+    for i in range(n) : #on cherche les sommets de degré maximum
         if D[i] == degmax :
             centres.append(G[i])
+
     return len(centres), centres, degmax
 
+################ MAIN ################
 
-    '''for i in range(n)  : #on calcule le rayon
-        if D[i] > temp : #on prend la plus grande distance entre le sommet 0 et les autres sommets
-            temp = D[i] #on prend la plus grande distance entre le sommet 0 et les autres sommets
-    rayon = temp
-
-    for i in range(n) :
-        for j in range(n) :
-            if max(D[i]) < rayon :
-                rayon = max(D[i])           
-    for i in range(n) :
-        if max(D[i]) == rayon :
-            centres.append(G[i])
-    return len(centres), centres, rayon'''
-
-# TESTS
-#TEST LISTES
 
 S1 ={"id" : 0,"nom" : "A", "aretes" : []}
 S2 ={"id" : 1,"nom" : "B", "aretes" : []}
 S3 ={"id" : 2,"nom" : "C", "aretes" : []}
 S4 ={"id" : 3,"nom" : "D", "aretes" : []}
-
-S5 = {"id" : 2,"nom" : "D", "aretes" : []}
 
 
 grapheL = graphe_videL()
@@ -197,6 +183,12 @@ addL(grapheL, S3, S4) # D C
 
 print("graphe L :\n", grapheL)
 
+######## 1er TEST ########
+
+## RAYON, DIAMETRE, CENTRES :
+
+print("\nMéthode de mesure RAYON, DIAMETRE, CENTRES : ")
+
 D = calcul_distances(grapheL)
 print("matrice de distances :\n", D)
 
@@ -211,14 +203,14 @@ print("rayon : ", rayon)
 
 D2 = calcul_degres(grapheL)
 
-print("\nDEGRES : ", D2)
+print("\nMéthode de mesure DEGRES : ", D2)
 
 nbcentres2, centres2, degmax2 = donne_centres_degre(grapheL, D2)
 print("\nnombre de centres : ", nbcentres2)
 print("centres : ", centres2)
 print("Degre maximal d'un sommet de G : ", degmax2)
 
-### 2ème TEST
+######## 2ème TEST ########
 
 S1 ={"id" : 0,"nom" : "A", "aretes" : []}
 S2 ={"id" : 1,"nom" : "B", "aretes" : []}
@@ -237,14 +229,17 @@ add_sommetL(grapheL2, S4)
 add_sommetL(grapheL2, S5)
 
 addL(grapheL2, S1, S2) # A B
-addL(grapheL2, S1, S3) # A C
+#addL(grapheL2, S1, S3) # A C
 addL(grapheL2, S1, S4) #A D
-addL(grapheL2, S1, S5) # A E
+#addL(grapheL2, S1, S5) # A E
 addL(grapheL2, S2, S3) # B C
-addL(grapheL2, S3, S4) # D C
+#addL(grapheL2, S3, S4) # D C
 addL(grapheL2, S4, S5) # E D
 
 print("graphe L :\n", grapheL2)
+
+## RAYON, DIAMETRE, CENTRES :
+print("\n Méthode de mesure RAYON, DIAMETRE, CENTRES : ")
 
 D = calcul_distances(grapheL2)
 print("matrice de distances :\n", D)
@@ -260,7 +255,7 @@ print("rayon : ", rayon)
 
 D2 = calcul_degres(grapheL2)
 
-print("\nDEGRES : ", D2)
+print("\n Méthode de mesure DEGRES : ", D2)
 
 nbcentres2, centres2, degmax2 = donne_centres_degre(grapheL2, D2)
 print("\nnombre de centres : ", nbcentres2)
