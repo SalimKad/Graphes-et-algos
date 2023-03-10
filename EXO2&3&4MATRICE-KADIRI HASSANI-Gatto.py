@@ -583,7 +583,7 @@ def G(n,p):
         for j in range(n):
             x = random.random()
             #print(x)
-            if(x > p):
+            if(x < p):
                 graphe.matrice[i][j] = 1
                 graphe.matrice[j][i] = 1
         
