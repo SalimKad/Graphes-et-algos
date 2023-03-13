@@ -337,7 +337,7 @@ def inclus_areteM(self, self2):
 def est_partiel(self, self2):
     return inclus_sommetM(self, self2, True) and inclus_areteM(self, self2)
 
-def est_sous_graphe(self, self2):
+def est_sous_graphe2(self, self2):
     if est_partiel(self, self2):
         for i in range(len(self.sommets)):
             for j in range(len(self.sommets)):
@@ -348,6 +348,43 @@ def est_sous_graphe(self, self2):
                         return False
     else: return False
     return True
+
+def est_sous_graphe(self, self2):
+    if not inclus_sommetM(self, self2, True):
+        return False
+
+    if not inclus_areteM(self, self2):
+        return False
+
+    temp = []
+    for i in range(len(self2.GraphenomM)):
+        temp.append(self2.GraphenomM[i])
+    #print(temp)
+    #print(self.GraphenomM)
+    
+    for i in range(len(self.GraphenomM)):
+        if self.GraphenomM[i] not in temp:
+            return False
+
+    bool = True
+    for i in range(len(self.sommets)):
+        for j in range(len(self.sommets)):
+            if bool == False :
+                return False
+            x = self.GraphenomM[i]
+            y = self.GraphenomM[j]
+            for k in range (len(self2.sommets)):
+                if self2.GraphenomM[k] == x:
+                    for l in range (len(self2.sommets)):
+                        if self2.GraphenomM[l] == y:
+                            if self2.matrice[k][l] == 1:
+                                if self.matrice[i][j] == 1:
+                                    bool = True
+                                    break
+                                bool = False
+                    break
+    return True
+
 
 
 def est_sous_graphe_partiel(self, self2):
