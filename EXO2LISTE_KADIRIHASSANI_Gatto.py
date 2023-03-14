@@ -1,6 +1,5 @@
 #KADIRI HASSANI Salim - GATTO Elisa
 import numpy as np
-import copy
 
 import EXO1_KADIRIHASSANI_Gatto as exo1
  
@@ -226,7 +225,7 @@ def est_clique(G, G2):
     for i in range(len(G)):
         for j in range(len(G)):
             if i != j:
-                if not est_voisinL(G, G[i], G[j]):
+                if not exo1.est_voisinL(G, G[i], G[j]):
                     return False
                 
     return True
@@ -253,19 +252,19 @@ S4 ={"id" : 3,"nom" : "D", "aretes" : []}
 S5 = {"id" : 2,"nom" : "D", "aretes" : []}
 
 
-grapheL = exo1.exo1.graphe_videL()
+grapheL = exo1.graphe_videL()
 
 exo1.add_sommetL(grapheL, S1)
 exo1.add_sommetL(grapheL, S2)
 exo1.add_sommetL(grapheL, S3)
 exo1.add_sommetL(grapheL, S4) 
 
-exo1.exo1.addL(grapheL, S1, S2) # A B
-exo1.exo1.addL(grapheL, S1, S3) # A C
-exo1.exo1.addL(grapheL, S1, S4) #A D 
-exo1.exo1.addL(grapheL, S2, S3) # B C
-exo1.exo1.addL(grapheL, S3, S4) # D C
-exo1.exo1.addL(grapheL, S2, S4) # D B
+exo1.addL(grapheL, S1, S2) # A B
+exo1.addL(grapheL, S1, S3) # A C
+exo1.addL(grapheL, S1, S4) #A D 
+exo1.addL(grapheL, S2, S3) # B C
+exo1.addL(grapheL, S3, S4) # D C
+exo1.addL(grapheL, S2, S4) # D B
 
 S6 ={"id" : 2,"nom" : "D", "aretes" : []}
 S7 ={"id" : 3,"nom" : "C", "aretes" : []}
