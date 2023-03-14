@@ -222,7 +222,7 @@ print(est_voisinL(grapheL, A, C))
 
 saveL(grapheL, "graphes.txt")
 
-grapheL2 = loadL("grapheL.txt")
+grapheL2 = loadL("graphes.txt")
 print(grapheL2)
 
 
