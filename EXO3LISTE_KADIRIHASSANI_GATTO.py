@@ -1,73 +1,7 @@
 #KADIRI HASSANI Salim - GATTO Elisa
 import numpy as np
-import copy
+
 import EXO1_KADIRIHASSANI_Gatto as exo1
-
-################ FONCTIONS DE L'EXERCICE 1 DONT ON A BESOIN ################
-
-def graphe_videL() : 
-    '''créer une liste vide'''
-    return []
-
-def add_sommetL(G, i) :
-    '''ajoute un sommet à la liste de listes'''
-    temp = [] 
-    # temp va contenir les id déjà présentes dans G
-    for j in range(len(G)) :
-      temp.append(G[j]["id"])
-
-    #si G est vide, on ajoute le sommet à la liste de listes
-    if len(G) == 0 :
-        j = copy.deepcopy(i)
-        G.append(j)
-    #sinon, on vérifie que le sommet n'existe pas déjà
-    elif i["id"] not in temp : #si le sommet n'existe pas, on l'ajoute à la liste de listes
-        j = copy.deepcopy(i)
-        G.append(j)
-        
-        
-
-def addL(G, i, j) :
-    '''ajoute une arête entre i et j'''
-    temp = []
-    for k in range(len(G)) :
-        temp.append(G[k]["id"])
-
-    if i["id"] not in temp : #si le sommet n'existe pas, on l'ajoute à la liste de listes
-        add_sommetL(G, i)
-    if j["id"] not in temp :
-        add_sommetL(G, j)
-    if j["id"] not in G[i["id"]]["aretes"] :
-        '''print(G[i["id"]])
-        print(G[0][0]["aretes"])
-        print(i)
-        print(G[i["id"]]["aretes"])'''
-        G[i["id"]]["aretes"].append(j["id"])
-    #print("i id = ", i["id"])
-    #print(G[j["id"]])
-    if i["id"] not in G[j["id"]]["aretes"] :
-        G[j["id"]]["aretes"].append(i["id"])
-
-
-def suppL(G, i, j) : 
-    '''supprime l'arête entre i et j'''
-    a:int = i["id"]
-    b:int = j["id"]
-
-    if b in G[a]["aretes"] :
-        G[a]["aretes"].remove(b)
-    if a in G[b]["aretes"] :
-        G[b]["aretes"].remove(a)
-
-def est_voisinL(G, i, j): 
-    '''vérifie si i et j sont reliés par une arête'''
-    a:int = i["id"]
-    b:int = j["id"]
-
-    if a<len(G) and b <len(G) :
-        if b in  G[a]["aretes"] and a in G[b]["aretes"] :
-            return True
-    return False
 
 ################ FONCTIONS DE L'EXERCICE 3 ################
 
@@ -85,7 +19,7 @@ def calcul_distances(G) :
 
         for j in range(n) :
             if i != j :
-                if est_voisinL(G, G[i], G[j]) :
+                if exo1.est_voisinL(G, G[i], G[j]) :
                     D[i][j] = 1
                 else :
                     D[i][j] = n #on met n pour représenter l'infini car on ne peut pas avoir de distance supérieure à n-1 dans un graphe connexe
@@ -167,19 +101,19 @@ S3 ={"id" : 2,"nom" : "C", "aretes" : []}
 S4 ={"id" : 3,"nom" : "D", "aretes" : []}
 
 
-grapheL = graphe_videL()
+grapheL = exo1.graphe_videL()
 
-add_sommetL(grapheL, S1)
-add_sommetL(grapheL, S2)
-add_sommetL(grapheL, S3)
-add_sommetL(grapheL, S4) 
+exo1.add_sommetL(grapheL, S1)
+exo1.add_sommetL(grapheL, S2)
+exo1.add_sommetL(grapheL, S3)
+exo1.add_sommetL(grapheL, S4) 
 
-addL(grapheL, S1, S2) # A B
-addL(grapheL, S1, S3) # A C
-addL(grapheL, S1, S4) #A D 
-addL(grapheL, S2, S3) # B C
-addL(grapheL, S3, S4) # D C
-#addL(grapheL, S2, S4) # D B
+exo1.addL(grapheL, S1, S2) # A B
+exo1.addL(grapheL, S1, S3) # A C
+exo1.addL(grapheL, S1, S4) #A D 
+exo1.addL(grapheL, S2, S3) # B C
+exo1.addL(grapheL, S3, S4) # D C
+#exo1.addL(grapheL, S2, S4) # D B
 
 
 print("graphe L :\n", grapheL)
@@ -221,21 +155,21 @@ S5 ={"id" : 4,"nom" : "E", "aretes" : []}
 
 print("\n2ème TEST : ")
 
-grapheL2 = graphe_videL()
+grapheL2 = exo1.graphe_videL()
 
-add_sommetL(grapheL2, S1)
-add_sommetL(grapheL2, S2)
-add_sommetL(grapheL2, S3)
-add_sommetL(grapheL2, S4)
-add_sommetL(grapheL2, S5)
+exo1.add_sommetL(grapheL2, S1)
+exo1.add_sommetL(grapheL2, S2)
+exo1.add_sommetL(grapheL2, S3)
+exo1.add_sommetL(grapheL2, S4)
+exo1.add_sommetL(grapheL2, S5)
 
-addL(grapheL2, S1, S2) # A B
-#addL(grapheL2, S1, S3) # A C
-addL(grapheL2, S1, S4) #A D
-#addL(grapheL2, S1, S5) # A E
-addL(grapheL2, S2, S3) # B C
-#addL(grapheL2, S3, S4) # D C
-addL(grapheL2, S4, S5) # E D
+exo1.addL(grapheL2, S1, S2) # A B
+#exo1.addL(grapheL2, S1, S3) # A C
+exo1.addL(grapheL2, S1, S4) #A D
+#exo1.addL(grapheL2, S1, S5) # A E
+exo1.addL(grapheL2, S2, S3) # B C
+#exo1.addL(grapheL2, S3, S4) # D C
+exo1.addL(grapheL2, S4, S5) # E D
 
 print("graphe L :\n", grapheL2)
 
