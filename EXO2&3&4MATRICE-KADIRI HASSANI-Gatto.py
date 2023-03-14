@@ -186,46 +186,16 @@ def saveM(self, nom):
     f.close()
 
 
-# TESTS
-#TEST LISTES
+
+
+
+#TESTS MATRICE
 
 A ={"id" : 0,"nom" : "A", "aretes" : []}
 B ={"id" : 1,"nom" : "B", "aretes" : []}
 C ={"id" : 2,"nom" : "C", "aretes" : []}
 D ={"id" : 3,"nom" : "D", "aretes" : []}
 
-'''
-grapheL = graphe_videL()
-
-add_sommetL(grapheL, A)
-add_sommetL(grapheL, B)
-add_sommetL(grapheL, C)
-#add_sommetL(grapheL, D) 
-
-addL(grapheL, A, B)
-addL(grapheL, C, A)
-addL(grapheL, C, B)
-addL(grapheL, B, D)
-print(grapheL)
-
-print(est_voisinL(grapheL, A, B))
-print(est_voisinL(grapheL, A, C))
-print(est_voisinL(grapheL, B, C))
-print(est_voisinL(grapheL, A, D))
-
-suppL(grapheL, A, B)
-print(grapheL)
-
-print(est_voisinL(grapheL, A, C))
-
-saveL(grapheL, "graphes.txt")
-
-grapheL2 = loadL("grapheL.txt")
-print(grapheL2)
-'''
-
-
-#TESTS MATRICE
 graphe1 = Graphe()
 #print(Graphe.sommets)
 add_sommet(graphe1, A)
@@ -258,150 +228,6 @@ Graphe2 = loadM("test.txt")
 #print(Graphe2.matrice)
 
 
-def matrice_to_liste(self):
-    liste = graphe_videL()
-    for i in range(len(self.sommets)):
-        #liste.append({"id": self.sommets[i], "nom": GraphenomM[i], "aretes": []})
-        add_sommetL(liste, {"id": self.sommets[i], "nom": GraphenomM[i], "aretes": []})
-    for i in range(len(self.sommets)):
-        for j in range(len(self.sommets)):
-            if self.matrice[i][j] == 1:
-                #liste[i]["aretes"].append(liste[j])
-                addL(liste, {"id": self.sommets[i], "nom": GraphenomM[i], "aretes": []}, {"id": self.sommets[j], "nom": GraphenomM[j], "aretes": []})
-    return liste
-
-def liste_to_matrice(liste):
-    matrice = graphe_vide(Graphe())
-    #transfere de sommets du graphe en liste au graphe en matrice
-    for i in range (len(liste)):
-        #G i "id"
-        a = liste[i]
-        print("a=",a)
-        add_sommet(matrice, a)
-    print("Matrice = ",matrice)
-    #transfere des aretes du graphe en liste au graphe en matrice
-    for i in range (len(liste)):
-        for j in range(len(liste[i]["aretes"])):
-            add(matrice, liste[i]["aretes"][j], liste[j]["id"])
-    return matrice
-
-'''
-graphe_liste = matrice_to_liste(Graphe)
-print(Graphe.matrice)
-print(graphe_liste)
-
-
-graphe_matrice = liste_to_matrice(graphe_liste)
-print(graphe_liste)
-print(graphe_matrice.matrice)
-'''
-
-
-
-# EXERCICE 2 : GRAPHE PARTIEL ET SOUS-GRAPHE
-
-def inclus_sommetM(self, self2, strict):
-    if len(self.sommets) > len(self2.sommets):
-        return False
-    if strict:
-        if len(self.sommets) == len(self2.sommets):
-            return False
-    else:
-        for i in range(len(self.sommets)):
-            if self.sommets[i] not in self2.sommets:
-                return False
-    return True
-
-
-def inclus_areteM(self, self2):
-    #if inclus_sommetM(self,self2,False):
-    for i in range(len(self.sommets)):
-        #print(self.GraphenomM[i])
-        if self.GraphenomM[i] in self2.GraphenomM:
-            for j in range(len(self.sommets)):
-                #print(self.GraphenomM[self.sommets[i]])
-                #print(self.GraphenomM[i])
-                #print(self2.GraphenomM[j])
-                #print("\n")
-                if self.matrice[i][j] == 1:
-                    if self2.matrice[i][j] != 1:
-                        return False
-        else:
-            for j in range(len(self.sommets)):
-                #print(self.matrice[i][j])
-                if self.matrice[i][j] == 1:
-                    return False
-    return True
-
-
-def est_partiel(self, self2):
-    return inclus_sommetM(self, self2, True) and inclus_areteM(self, self2)
-
-def est_sous_graphe2(self, self2):
-    if est_partiel(self, self2):
-        for i in range(len(self.sommets)):
-            for j in range(len(self.sommets)):
-                #if(self.GraphenomM[i] is self2.GraphenomM[j]):
-                    #for k in range(len(self.sommets)):
-                if(self2.matrice[i][j] == 1):
-                    if(self.matrice[i][j] != 1):
-                        return False
-    else: return False
-    return True
-
-def est_sous_graphe(self, self2):
-    if not inclus_sommetM(self, self2, True):
-        return False
-
-    if not inclus_areteM(self, self2):
-        return False
-
-    temp = []
-    for i in range(len(self2.GraphenomM)):
-        temp.append(self2.GraphenomM[i])
-    #print(temp)
-    #print(self.GraphenomM)
-    
-    for i in range(len(self.GraphenomM)):
-        if self.GraphenomM[i] not in temp:
-            return False
-
-    bool = True
-    for i in range(len(self.sommets)):
-        for j in range(len(self.sommets)):
-            if bool == False :
-                return False
-            x = self.GraphenomM[i]
-            y = self.GraphenomM[j]
-            for k in range (len(self2.sommets)):
-                if self2.GraphenomM[k] == x:
-                    for l in range (len(self2.sommets)):
-                        if self2.GraphenomM[l] == y:
-                            if self2.matrice[k][l] == 1:
-                                if self.matrice[i][j] == 1:
-                                    bool = True
-                                    break
-                                bool = False
-                    break
-    return True
-
-
-
-def est_sous_graphe_partiel(self, self2):
-    return est_partiel(self, self2) and est_sous_graphe(self, self2)
-
-'''
-def est_clique(self, self2):
-    A
-'''
-
-def est_stable(self, self2):
-    if inclus_sommetM(self, self2, False):
-        for i in range(len(self2.sommets)):
-            for j in range(len(self2.sommets)):
-                if self2.matrice[i][j] != 0:
-                    return False
-    return True
 
 
 graphe = Graphe()
