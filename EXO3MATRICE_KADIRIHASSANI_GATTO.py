@@ -109,9 +109,9 @@ def calcul_distances(G):
     return dist
 
 '''
-print("distances graphe : ")
+print("distances de graphe : ")
 print(calcul_distances(graphe))
-print("distances graphe5 : ")
+print("distances de graphe5 : ")
 print(calcul_distances(graphe5))
 '''
 
@@ -137,7 +137,7 @@ def excentricite(G, s):
         excent = max(excent, dist[s][i])
     return excent
 
-#print("\nexcentricites graphe :")
+#print("\nexcentricites de graphe :")
 excentricites = np.zeros(len(graphe.sommets))
 for i in range(len(graphe.sommets)):
     excentricites[i] = excentricite(graphe,i)
@@ -164,7 +164,7 @@ def donne_centres(G):
     
     return (len(centre),centre,rayon)
 
-#print("\ndonne_centre graphe :")
+#print("\ndonne_centre de graphe :")
 #print(donne_centres(graphe))
 
 def calcul_degres(G):

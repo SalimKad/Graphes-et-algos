@@ -322,7 +322,7 @@ exo1.addL(grapheL, S2, S4) # D B
 print("graphe L2 :\n", grapheL2)
 print("graphe L5 :\n", grapheL5)
 
-print("L5 est un sous-graphe de L2 ?", est_clique(grapheL5, grapheL2))
+print("L5 est clique de L2 ?", est_clique(grapheL5, grapheL2))
 
 
 grapheL6 = exo1.graphe_videL()
