@@ -1,6 +1,7 @@
 #KADIRI HASSANI Salim - GATTO Elisa
 import numpy as np
 import copy
+import EXO1_KADIRIHASSANI_Gatto as exo1
 
 ################ FONCTIONS DE L'EXERCICE 1 DONT ON A BESOIN ################
 

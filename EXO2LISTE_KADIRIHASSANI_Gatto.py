@@ -2,73 +2,7 @@
 import numpy as np
 import copy
 
-################ FONCTIONS DE L'EXERCICE 1 DONT ON A BESOIN ################
-
-# On crée une structure contenant les informations d'un graphe
-
-def graphe_videL() : 
-    '''créer une liste vide'''
-    return []
-
-def add_sommetL(G, i) :
-    '''ajoute un sommet à la liste de listes'''
-    temp = [] 
-    # temp va contenir les id déjà présentes dans G
-    for j in range(len(G)) :
-      temp.append(G[j]["id"])
-
-    #si G est vide, on ajoute le sommet à la liste de listes
-    if len(G) == 0 :
-        j = copy.deepcopy(i)
-        G.append(j)
-    #sinon, on vérifie que le sommet n'existe pas déjà
-    elif i["id"] not in temp : #si le sommet n'existe pas, on l'ajoute à la liste de listes
-        j = copy.deepcopy(i)
-        G.append(j)
-        
-        
-
-def addL(G, i, j) :
-    '''ajoute une arête entre i et j'''
-    temp = []
-    for k in range(len(G)) :
-        temp.append(G[k]["id"])
-
-    if i["id"] not in temp : #si le sommet n'existe pas, on l'ajoute à la liste de listes
-        add_sommetL(G, i)
-    if j["id"] not in temp :
-        add_sommetL(G, j)
-    if j["id"] not in G[i["id"]]["aretes"] :
-        '''print(G[i["id"]])
-        print(G[0][0]["aretes"])
-        print(i)
-        print(G[i["id"]]["aretes"])'''
-        G[i["id"]]["aretes"].append(j["id"])
-    #print("i id = ", i["id"])
-    #print(G[j["id"]])
-    if i["id"] not in G[j["id"]]["aretes"] :
-        G[j["id"]]["aretes"].append(i["id"])
-
-
-def suppL(G, i, j) : 
-    '''supprime l'arête entre i et j'''
-    a:int = i["id"]
-    b:int = j["id"]
-
-    if b in G[a]["aretes"] :
-        G[a]["aretes"].remove(b)
-    if a in G[b]["aretes"] :
-        G[b]["aretes"].remove(a)
-
-def est_voisinL(G, i, j): 
-    '''vérifie si i et j sont reliés par une arête'''
-    a:int = i["id"]
-    b:int = j["id"]
-
-    if a<len(G) and b <len(G) :
-        if b in  G[a]["aretes"] and a in G[b]["aretes"] :
-            return True
-    return False
+import EXO1_KADIRIHASSANI_Gatto as exo1
  
 ################ FONCTIONS DE L'EXERCICE 2 ################
 
@@ -319,33 +253,33 @@ S4 ={"id" : 3,"nom" : "D", "aretes" : []}
 S5 = {"id" : 2,"nom" : "D", "aretes" : []}
 
 
-grapheL = graphe_videL()
+grapheL = exo1.exo1.graphe_videL()
 
-add_sommetL(grapheL, S1)
-add_sommetL(grapheL, S2)
-add_sommetL(grapheL, S3)
-add_sommetL(grapheL, S4) 
+exo1.add_sommetL(grapheL, S1)
+exo1.add_sommetL(grapheL, S2)
+exo1.add_sommetL(grapheL, S3)
+exo1.add_sommetL(grapheL, S4) 
 
-addL(grapheL, S1, S2) # A B
-addL(grapheL, S1, S3) # A C
-addL(grapheL, S1, S4) #A D 
-addL(grapheL, S2, S3) # B C
-addL(grapheL, S3, S4) # D C
-addL(grapheL, S2, S4) # D B
+exo1.exo1.addL(grapheL, S1, S2) # A B
+exo1.exo1.addL(grapheL, S1, S3) # A C
+exo1.exo1.addL(grapheL, S1, S4) #A D 
+exo1.exo1.addL(grapheL, S2, S3) # B C
+exo1.exo1.addL(grapheL, S3, S4) # D C
+exo1.exo1.addL(grapheL, S2, S4) # D B
 
 S6 ={"id" : 2,"nom" : "D", "aretes" : []}
 S7 ={"id" : 3,"nom" : "C", "aretes" : []}
 
-grapheL4 = graphe_videL()
-add_sommetL(grapheL4, S1)
-add_sommetL(grapheL4, S2)
-add_sommetL(grapheL4, S6)
-add_sommetL(grapheL4, S7)
+grapheL4 = exo1.graphe_videL()
+exo1.add_sommetL(grapheL4, S1)
+exo1.add_sommetL(grapheL4, S2)
+exo1.add_sommetL(grapheL4, S6)
+exo1.add_sommetL(grapheL4, S7)
 
-'''addL(grapheL4, S1, S2)
-addL(grapheL4, S1, S6)
-addL(grapheL4, S1, S7)'''
-addL(grapheL4, S2, S6)
+'''exo1.addL(grapheL4, S1, S2)
+exo1.addL(grapheL4, S1, S6)
+exo1.addL(grapheL4, S1, S7)'''
+exo1.addL(grapheL4, S2, S6)
 
 print("graphe L4 :\n", grapheL4)
 
@@ -357,14 +291,14 @@ print("L4 partiel de L ?", est_partiel(grapheL4, grapheL))
 S8 ={"id" : 2,"nom" : "B", "aretes" : []}
 S9 ={"id" : 1,"nom" : "C", "aretes" : []}
 
-grapheL5 = graphe_videL()
-add_sommetL(grapheL5, S1)
-add_sommetL(grapheL5, S9)
-add_sommetL(grapheL5, S8)
+grapheL5 = exo1.graphe_videL()
+exo1.add_sommetL(grapheL5, S1)
+exo1.add_sommetL(grapheL5, S9)
+exo1.add_sommetL(grapheL5, S8)
 
-addL(grapheL5, S1, S8)
-addL(grapheL5, S1, S9)
-addL(grapheL5, S8, S9)
+exo1.addL(grapheL5, S1, S8)
+exo1.addL(grapheL5, S1, S9)
+exo1.addL(grapheL5, S8, S9)
 
 print("graphe L5 :\n", grapheL5)
 
@@ -373,18 +307,18 @@ print("L5 est un sous graphe de L ?", est_sous_graphe(grapheL5, grapheL))
 
 print("L5 est une clique de L ?", est_clique(grapheL5, grapheL))
 
-grapheL2 = graphe_videL()
+grapheL2 = exo1.graphe_videL()
 
-add_sommetL(grapheL2, S1)
-add_sommetL(grapheL2, S2)
-add_sommetL(grapheL2, S3)
-add_sommetL(grapheL2, S4) 
+exo1.add_sommetL(grapheL2, S1)
+exo1.add_sommetL(grapheL2, S2)
+exo1.add_sommetL(grapheL2, S3)
+exo1.add_sommetL(grapheL2, S4) 
 
-addL(grapheL, S1, S2) # A B
-addL(grapheL, S1, S3) # A C
-addL(grapheL, S1, S4) #A D 
-addL(grapheL, S3, S4) # D C
-addL(grapheL, S2, S4) # D B
+exo1.addL(grapheL, S1, S2) # A B
+exo1.addL(grapheL, S1, S3) # A C
+exo1.addL(grapheL, S1, S4) #A D 
+exo1.addL(grapheL, S3, S4) # D C
+exo1.addL(grapheL, S2, S4) # D B
 
 print("graphe L2 :\n", grapheL2)
 print("graphe L5 :\n", grapheL5)
@@ -392,12 +326,12 @@ print("graphe L5 :\n", grapheL5)
 print("L5 est un sous-graphe de L2 ?", est_clique(grapheL5, grapheL2))
 
 
-grapheL6 = graphe_videL()
-add_sommetL(grapheL6, S1)
-add_sommetL(grapheL6, S9)
-add_sommetL(grapheL6, S8)
+grapheL6 = exo1.graphe_videL()
+exo1.add_sommetL(grapheL6, S1)
+exo1.add_sommetL(grapheL6, S9)
+exo1.add_sommetL(grapheL6, S8)
 
-addL(grapheL6, S1, S9)
+exo1.addL(grapheL6, S1, S9)
 
 print("graphe L6 :\n", grapheL6)
 
@@ -405,11 +339,11 @@ print("L6 est un sous graphe partiel de L ?", est_sous_graphe_partiel(grapheL6, 
 
 print("L6 est stable de L ?", est_stable(grapheL6, grapheL))
 
-grapheL7 = graphe_videL()
+grapheL7 = exo1.graphe_videL()
 
-add_sommetL(grapheL7, S1)
-add_sommetL(grapheL7, S9)
-add_sommetL(grapheL7, S8)
+exo1.add_sommetL(grapheL7, S1)
+exo1.add_sommetL(grapheL7, S9)
+exo1.add_sommetL(grapheL7, S8)
 
 print("graphe L7 :\n", grapheL7)
 print("L7 est stable de L ?", est_stable(grapheL7, grapheL))
