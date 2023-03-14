@@ -1,3 +1,7 @@
+#KADIRI HASSANI Salim - GATTO Elisa
+import numpy as np
+import copy
+
 # FONCTIONS DE L'EXERCICE 1 DONT ON A BESOIN
 
 class Graphe: 
@@ -25,10 +29,7 @@ def add(self, i, j):
         self.matrice[i_index][j_index] = 1
         self.matrice[j_index][i_index] = 1
 
-A ={"id" : 0,"nom" : "A", "aretes" : []}
-B ={"id" : 1,"nom" : "B", "aretes" : []}
-C ={"id" : 2,"nom" : "C", "aretes" : []}
-D ={"id" : 3,"nom" : "D", "aretes" : []}
+
 
 
 # EXERCICE 2 : GRAPHE PARTIEL ET SOUS-GRAPHE
@@ -70,17 +71,7 @@ def inclus_areteM(self, self2):
 def est_partiel(self, self2):
     return inclus_sommetM(self, self2, True) and inclus_areteM(self, self2)
 
-def est_sous_graphe2(self, self2):
-    if est_partiel(self, self2):
-        for i in range(len(self.sommets)):
-            for j in range(len(self.sommets)):
-                #if(self.GraphenomM[i] is self2.GraphenomM[j]):
-                    #for k in range(len(self.sommets)):
-                if(self2.matrice[i][j] == 1):
-                    if(self.matrice[i][j] != 1):
-                        return False
-    else: return False
-    return True
+
 
 def est_sous_graphe(self, self2):
     if not inclus_sommetM(self, self2, True):
@@ -123,18 +114,36 @@ def est_sous_graphe(self, self2):
 def est_sous_graphe_partiel(self, self2):
     return est_partiel(self, self2) and est_sous_graphe(self, self2)
 
-'''
-def est_clique(self, self2):
-    A
-'''
 
-def est_stable(self, self2):
-    if inclus_sommetM(self, self2, False):
-        for i in range(len(self2.sommets)):
-            for j in range(len(self2.sommets)):
-                if self2.matrice[i][j] != 0:
+def est_clique(self, self2):
+    if not est_sous_graphe(self, self2):
+        return False
+    
+    for i in range(len(self.sommets)):
+        for j in range(len(self.sommets)):
+            if i != j:
+                if self.matrice[i][j] == 0:
                     return False
     return True
+
+
+def est_stable(self, self2):
+    if not est_sous_graphe(self, self2):
+        return False
+    
+    for i in range(len(self2.sommets)):
+        for j in range(len(self2.sommets)):
+            if self2.matrice[i][j] != 0:
+                return False
+    return True
+
+
+# TESTS
+
+A ={"id" : 0,"nom" : "A", "aretes" : []}
+B ={"id" : 1,"nom" : "B", "aretes" : []}
+C ={"id" : 2,"nom" : "C", "aretes" : []}
+D ={"id" : 3,"nom" : "D", "aretes" : []}
 
 
 graphe = Graphe()
@@ -186,6 +195,11 @@ add_sommet(graphe5, C)
 add(graphe5, A, B)
 add(graphe5, B, C)
 
+graphe6 = Graphe()
+add_sommet(graphe6, A)
+add_sommet(graphe6, B)
+add_sommet(graphe6, C)
+
 '''
 print(graphe.sommets)
 print(graphe2.sommets)
@@ -216,4 +230,10 @@ print(est_sous_graphe(graphe5, graphe))
 print(est_sous_graphe_partiel(graphe3, graphe))
 print(est_sous_graphe_partiel(graphe4, graphe))
 print(est_sous_graphe_partiel(graphe5, graphe))
+
+print(est_clique(graphe3, graphe))
+print(est_clique(graphe4, graphe))
+
+print(est_stable(graphe6, graphe5))
+print(est_stable(graphe3, graphe5))
 '''
