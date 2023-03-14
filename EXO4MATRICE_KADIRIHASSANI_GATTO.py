@@ -1,6 +1,6 @@
 #KADIRI HASSANI Salim - GATTO Elisa
 import numpy as np
-import copy
+import EXO1_KADIRIHASSANI_Gatto as exo1
 
 # FONCTIONS DE L'EXERCICE 1 DONT ON A BESOIN
 
@@ -28,6 +28,8 @@ def add(self, i, j):
         j_index = self.sommets.index(j["id"])
         self.matrice[i_index][j_index] = 1
         self.matrice[j_index][i_index] = 1
+
+
 
 
 A ={"id" : 0,"nom" : "A", "aretes" : []}
@@ -113,5 +115,12 @@ def G(n,p):
     return graphe
 
 graphe6 = G(5,0.7)
-print(graphe6.sommets)
-print(graphe6.matrice)
+print("sommets de graphe 6 : ",graphe6.sommets)
+print("matrice d'adjacence de graphe 6 :\n",graphe6.matrice)
+
+exo1.saveM(graphe6, "graphe_matrice_aleat.txt")
+
+graphe7 = exo1.loadM("graphe_matrice_aleat.txt")
+print("\ngraphe 7 load a partir du fichier texte de graphe 6 : ")
+print("sommets de graphe 7 : ",graphe7.sommets)
+print("matrice de grpahe 7 : ",graphe7.matrice)
